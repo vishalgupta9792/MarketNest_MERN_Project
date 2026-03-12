@@ -3,18 +3,43 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Home() {
   const { user } = useAuth();
+  const headline = 'Fashion. Simplified.';
+  const brand = 'MarketNest.';
 
   return (
     <div>
-      <div style={{ background: 'linear-gradient(135deg, #1A1A2E 0%, #0F3460 100%)', color: '#fff', padding: '6rem 2rem', textAlign: 'center' }}>
-        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '3.5rem', marginBottom: '1rem', lineHeight: 1.2 }}>
-          Fashion. Simplified.<br />
-          <span style={{ color: '#E94560' }}>MarketNest.</span>
+      <div className="home-hero">
+        <h1 className="home-hero-title">
+          <span className="home-hero-line" aria-label={headline}>
+            {headline.split('').map((char, index) => (
+              <span
+                key={`${char}-${index}`}
+                className={`hero-letter${char === ' ' ? ' hero-letter-space' : ''}`}
+                style={{ animationDelay: `${index * 0.06}s` }}
+                aria-hidden="true"
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            ))}
+          </span>
+          <br />
+          <span className="home-hero-brand" aria-label={brand}>
+            {brand.split('').map((char, index) => (
+              <span
+                key={`${char}-${index}`}
+                className={`hero-letter hero-letter-brand${char === ' ' ? ' hero-letter-space' : ''}`}
+                style={{ animationDelay: `${0.9 + index * 0.05}s` }}
+                aria-hidden="true"
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            ))}
+          </span>
         </h1>
-        <p style={{ fontSize: '1.1rem', opacity: 0.8, maxWidth: 500, margin: '0 auto 2rem' }}>
+        <p className="home-hero-copy">
           Connect brands with customers. Discover curated fashion from top sellers.
         </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div className="home-hero-actions">
           {user ? (
             user.role === 'brand'
               ? <Link to="/dashboard" className="btn btn-primary">Go to Dashboard</Link>

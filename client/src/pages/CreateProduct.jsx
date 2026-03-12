@@ -76,6 +76,9 @@ export default function CreateProduct() {
           <div className="form-group">
             <label>Product Images (max 5)</label>
             <ImageUpload files={files} setFiles={setFiles} maxFiles={5} />
+            <small style={{ color: '#666', display: 'block', marginTop: '0.5rem' }}>
+              If image upload fails, check Cloudinary credentials in the backend `server/.env`.
+            </small>
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>

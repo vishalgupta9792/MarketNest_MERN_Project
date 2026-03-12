@@ -31,6 +31,12 @@ exports.errorHandler = (err, req, res, next) => {
     statusCode = 401;
   }
 
+  // Cloudinary config/auth errors
+  if (typeof message === 'string' && message.toLowerCase().includes('unknown api key')) {
+    message = 'Cloudinary credentials are invalid or still placeholders in server/.env.';
+    statusCode = 503;
+  }
+
   res.status(statusCode).json({
     success: false,
     message,

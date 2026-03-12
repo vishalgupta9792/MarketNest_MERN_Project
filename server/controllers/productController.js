@@ -1,7 +1,7 @@
 const Product = require('../models/Product');
 const asyncHandler = require('../utils/asyncHandler');
 const ApiError = require('../utils/ApiError');
-const cloudinary = require('../config/cloudinary');
+const { cloudinary, hasCloudinaryConfig } = require('../config/cloudinary');
 const streamifier = require('streamifier');
 
 // Upload buffer to Cloudinary
@@ -29,6 +29,9 @@ exports.createProduct = asyncHandler(async (req, res) => {
   let imageUrls = [];
   if (req.files && req.files.length > 0) {
     if (req.files.length > 5) throw new ApiError(400, 'Maximum 5 images allowed.');
+    if (!hasCloudinaryConfig()) {
+      throw new ApiError(503, 'Image upload is not configured yet. Add real Cloudinary credentials in server/.env or create the product without images.');
+    }
     imageUrls = await Promise.all(req.files.map((f) => uploadToCloudinary(f.buffer)));
   }
 
@@ -64,6 +67,9 @@ exports.updateProduct = asyncHandler(async (req, res) => {
 
   // Handle new images
   if (req.files && req.files.length > 0) {
+    if (!hasCloudinaryConfig()) {
+      throw new ApiError(503, 'Image upload is not configured yet. Add real Cloudinary credentials in server/.env before uploading product images.');
+    }
     const newUrls = await Promise.all(req.files.map((f) => uploadToCloudinary(f.buffer)));
     product.images = [...product.images, ...newUrls].slice(0, 5);
   }

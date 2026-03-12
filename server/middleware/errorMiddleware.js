@@ -31,6 +31,20 @@ exports.errorHandler = (err, req, res, next) => {
     statusCode = 401;
   }
 
+  // Mongo connectivity errors
+  if (
+    err.name === 'MongoServerSelectionError' ||
+    err.name === 'MongoNetworkError' ||
+    (typeof message === 'string' && (
+      message.includes('Could not connect to any servers in your MongoDB Atlas cluster') ||
+      message.toLowerCase().includes('ssl routines') ||
+      message.toLowerCase().includes('tls')
+    ))
+  ) {
+    message = 'Database connection failed. Check MongoDB Atlas Network Access and make sure your current IP is allowed.';
+    statusCode = 503;
+  }
+
   // Cloudinary config/auth errors
   if (typeof message === 'string' && message.toLowerCase().includes('unknown api key')) {
     message = 'Cloudinary credentials are invalid or still placeholders in server/.env.';

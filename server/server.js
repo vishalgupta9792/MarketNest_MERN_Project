@@ -12,7 +12,13 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (origin.startsWith('http://localhost')) return callback(null, true);
+    if (origin.startsWith('http://127.0.0.1')) return callback(null, true);
+    if (origin === process.env.CLIENT_URL) return callback(null, true);
+    return callback(new Error('CORS blocked'));
+  },
   credentials: true,
 }));
 app.use(express.json());

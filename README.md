@@ -158,6 +158,6 @@ All business logic, security decisions, auth flow implementation, and architectu
 
 ## 📬 Submission
 
-Submitted by: **Vishal Gupta **  
+Submitted by: Vishal Gupta   
 Email: careers@trizenventures.com  
 Subject: `Assignment Submission – Vishal Gupta`
